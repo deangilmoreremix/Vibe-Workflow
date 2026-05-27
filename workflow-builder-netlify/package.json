@@ -1,0 +1,28 @@
+{
+  "name": "vibe-workflow-netlify",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "dev:lib": "npm run dev:lib --workspace=../packages/workflow-builder",
+    "build:lib": "npm run build --workspace=../packages/workflow-builder"
+  },
+  "dependencies": {
+    "next": "16.1.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-icons": "^5.5.0",
+    "react-hot-toast": "^2.4.1",
+    "workflow-builder": "*../packages/workflow-builder"
+  },
+  "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.0.0",
+    "@tailwindcss/postcss": "^4",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.1",
+    "tailwindcss": "^4"
+  }
+}

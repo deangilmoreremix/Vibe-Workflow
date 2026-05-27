@@ -1,0 +1,17 @@
+[functions]
+  [functions.workflow]
+    path = "functions/workflow/index.ts"
+  [functions.app]
+    path = "functions/app/index.ts"
+
+[api]
+  enabled = true
+
+[auth]
+  enabled = true
+
+[storage]
+  enabled = true
+
+[db]
+  enabled = true
