@@ -6,13 +6,27 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOi
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const AuthContext = createContext({});
+const AuthContext = createContext({
+  session: null,
+  user: null,
+  supabase,
+});
 
-export function AuthProvider({ children, initialSession }) {
-  const [session, setSession] = useState(initialSession);
-  const [user, setUser] = useState(initialSession?.user || null);
+export function AuthProvider({ children }) {
+  const [session, setSession] = useState(null);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const getSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      setUser(session?.user || null);
+      setLoading(false);
+    };
+
+    getSession();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -22,6 +36,10 @@ export function AuthProvider({ children, initialSession }) {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   return (
     <AuthContext.Provider value={{ session, user, supabase }}>
