@@ -1,0 +1,29 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/workflow/*"
+  to = "/.netlify/functions/workflow/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/app/*"
+  to = "/.netlify/functions/app/:splat"
+  status = 200
+  force = true
+
+[template]
+  name = "Vibe Workflow"
+  description = "Open-source node-based AI workflow builder"
+
+[template.environment]
+  MU_API_KEY = "Your MuAPI key from https://muapi.ai"
