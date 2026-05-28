@@ -2,8 +2,10 @@ import React from 'react';
 import { cookies } from "next/headers";
 import WorkflowBuilderClient from "./WorkflowBuilderClient";
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
+
 async function fetchWorkflowData(id, cookieHeader) {
-  const baseUrl = "http://127.0.0.1:8000/api/workflow";
+  const baseUrl = `${API_BASE}/api/workflow`;
   try {
     const [workflowRes, schemasRes] = await Promise.all([
       fetch(`${baseUrl}/get-workflow-def/${id}`, {

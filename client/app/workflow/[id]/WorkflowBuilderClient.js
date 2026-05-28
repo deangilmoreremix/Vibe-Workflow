@@ -1,5 +1,4 @@
-"use client"
-
+"use client";
 import React from 'react'
 import { WorkflowBuilder } from "workflow-builder"
 import "reactflow/dist/style.css"
