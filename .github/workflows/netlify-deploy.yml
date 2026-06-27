@@ -1,0 +1,67 @@
+name: Deploy workflow-builder-netlify to Netlify
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'workflow-builder-netlify/**'
+      - 'packages/workflow-builder/**'
+      - '.github/workflows/netlify-deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: netlify-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: workflow-builder-netlify
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: |
+            workflow-builder-netlify/package-lock.json
+            packages/workflow-builder/package-lock.json
+
+      - name: Install workflow-builder package dependencies
+        working-directory: packages/workflow-builder
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Build workflow-builder CSS
+        working-directory: packages/workflow-builder
+        run: npm run build
+
+      - name: Install workflow-builder-netlify dependencies
+        run: npm install --no-audit --no-fund --legacy-peer-deps
+
+      - name: Build with Netlify CLI
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "Missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID secrets"
+            exit 1
+          fi
+          npx --yes netlify-cli@latest build --site="$NETLIFY_SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"
+
+      - name: Deploy to Netlify (prod)
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "Missing NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID secrets"
+            exit 1
+          fi
+          npx --yes netlify-cli@latest deploy --prod --dir=.netlify --site="$NETLIFY_SITE_ID" --auth="$NETLIFY_AUTH_TOKEN" --message="Deploy from ${{ github.sha }}"
