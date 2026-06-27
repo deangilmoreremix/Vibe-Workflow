@@ -7,16 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "build:lib": "npm run build --workspace=../packages/workflow-builder"
+    "prebuild": "cd ../packages/workflow-builder && npm install --no-audit --no-fund --legacy-peer-deps && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",
+    "axios": "^1.7.0",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
     "react-hot-toast": "^2.4.1",
-    "workflow-builder": "*../packages/workflow-builder"
+    "react-markdown": "^9.0.0",
+    "reactflow": "^11.11.4",
+    "remark-gfm": "^4.0.0",
+    "workflow-builder": "file:../packages/workflow-builder"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.0.0",

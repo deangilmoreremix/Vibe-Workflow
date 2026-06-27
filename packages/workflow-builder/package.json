@@ -2,14 +2,15 @@
   "name": "workflow-builder",
   "version": "1.0.0",
   "description": "Shared UI components and utilities for my Next.js apps",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "src/index.js",
+  "module": "src/index.js",
   "files": [
-    "dist"
+    "src",
+    "dist/tailwind.css"
   ],
   "scripts": {
     "build:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind.css --minify",
-    "build": "npm run build:css && babel src --out-dir dist --extensions .js,.jsx"
+    "build": "npm run build:css"
   },
   "license": "MIT",
   "dependencies": {
@@ -25,9 +26,6 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.3",
-    "@babel/preset-env": "^7.28.5",
-    "@babel/preset-react": "^7.28.5",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.3"
