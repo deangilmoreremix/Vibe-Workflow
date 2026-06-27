@@ -10,6 +10,7 @@ const AuthContext = createContext({
   session: null,
   user: null,
   supabase,
+  loading: true,
 });
 
 export function AuthProvider({ children }) {
@@ -37,12 +38,8 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  if (loading) {
-    return null;
-  }
-
   return (
-    <AuthContext.Provider value={{ session, user, supabase }}>
+    <AuthContext.Provider value={{ session, user, supabase, loading }}>
       {children}
     </AuthContext.Provider>
   );
