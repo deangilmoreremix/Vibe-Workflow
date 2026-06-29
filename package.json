@@ -5,7 +5,8 @@
     "workspaces": [
         "packages/*",
         "client",
-        "server"
+        "server",
+        "workflow-builder-netlify"
     ],
     "scripts": {
         "dev:app": "npm run dev -w client",
