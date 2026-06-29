@@ -5,7 +5,7 @@
   package = "@netlify/plugin-nextjs"
 
 [functions]
-  directory = "netlify/functions"
+  directory = "workflow-builder-netlify/netlify/functions"
   node_bundler = "esbuild"
 
 [[redirects]]
