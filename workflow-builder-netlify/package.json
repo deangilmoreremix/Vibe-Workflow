@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build:lib && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "build:lib": "../packages/workflow-builder/node_modules/.bin/tailwindcss -i ../packages/workflow-builder/src/tailwind.css -o ../packages/workflow-builder/dist/tailwind.css --minify && ../packages/workflow-builder/node_modules/.bin/babel ../packages/workflow-builder/src --out-dir ../packages/workflow-builder/dist --extensions .js,.jsx"
+    "lint": "eslint"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.0",

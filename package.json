@@ -12,7 +12,7 @@
         "dev:app": "npm run dev -w client",
         "build:app": "npm run build -w client",
         "build:lib": "npm run build -w packages/workflow-builder",
-        "build": "npm run build -w workflow-builder-netlify",
+        "build": "npm run build -w packages/workflow-builder && npm run build -w workflow-builder-netlify",
         "install:all": "npm install"
     }
 }
