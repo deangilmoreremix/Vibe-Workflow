@@ -3,7 +3,7 @@ import { Handle, Position, useReactFlow, useStore, useUpdateNodeInternals } from
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { downloadFile, imageModels } from "./utility";
 import { getRunId, getWorkflowId } from "./WorkflowStore";
-import axios from "axios";
+import apiClient from "../apiClient";
 import { toast } from "react-hot-toast";
 import { IoClose, IoImageOutline, IoTrashOutline } from "react-icons/io5";
 import UploadNode from "./UploadNode";
@@ -194,7 +194,7 @@ const ImageGeneration = ({ id, data, selected }) => {
   
   const pollNodeStatus = (run_id) => {
     const interval = setInterval(() => {
-      axios.get(`/api/workflow/run/${run_id}/status`)
+      apiClient.get(`/api/workflow/run/${run_id}/status`)
       .then((response) => {
         const nodesInRes = response.data.nodes || {};
         const nodeData = nodesInRes[id] || Object.entries(nodesInRes).find(([key]) => 
@@ -274,7 +274,7 @@ const ImageGeneration = ({ id, data, selected }) => {
         }
       }
 
-      const response = await axios.post(`/api/workflow/${workflow_id}/node/${id}/run`, {
+      const response = await apiClient.post(`/api/workflow/${workflow_id}/node/${id}/run`, {
         run_id: runId,
         model: selectedModel.id,
         params: params,
@@ -377,7 +377,7 @@ const ImageGeneration = ({ id, data, selected }) => {
 
     if (window.confirm("Are you sure you want to delete this history entry?")) {
       try {
-        await axios.delete(`/api/workflow/node-run/${currentHistory.node_run_id}`);
+        await apiClient.delete(`/api/workflow/node-run/${currentHistory.node_run_id}`);
         const newHistory = outputHistory.filter((_, i) => i !== currentHistoryIndex);
         
         data?.onDataChange?.(id, { 
@@ -448,7 +448,7 @@ const ImageGeneration = ({ id, data, selected }) => {
       return;
     }
     try { 
-      const response = await axios.post(`/api/workflow/${workflow_id}/thumbnail`, { 
+      const response = await apiClient.post(`/api/workflow/${workflow_id}/thumbnail`, { 
         thumbnail 
       });
       if (response.data.success) toast.success("Cover image updated successfully");

@@ -23,7 +23,7 @@ import { FaRegEdit, FaTelegramPlane } from "react-icons/fa";
 import { IoDuplicateOutline, IoImageOutline, IoVideocamOutline } from "react-icons/io5";
 import { Toaster, toast } from "react-hot-toast";
 import { FiSun, FiMoon } from "react-icons/fi";
-import axios from "axios";
+import apiClient from "../apiClient";
 import TextGeneration from "./TextNode";
 import ImageGeneration from "./ImageNode";
 import VideoGeneration from "./VideoNode";
@@ -304,7 +304,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
 
   useEffect(() => {
     if (!initialNodeSchemas) {
-      axios.get(`/api/workflow/${id}/node-schemas`)
+      apiClient.get(`/api/workflow/${id}/node-schemas`)
         .then(res => setNodeSchemas(res.data || {}))
         .catch(err => console.error("Failed to load node schemas", err));
     }
@@ -409,7 +409,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
 
     if (!id || !nodeSchemas?.categories) return;
 
-    axios.get(`/api/workflow/get-workflow-def/${id}`)
+    apiClient.get(`/api/workflow/get-workflow-def/${id}`)
       .then(res => {
         restoreWorkflow(res.data);
       })
@@ -816,7 +816,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
   const pollArchitectStatus = (request_id) => {
     const interval = setInterval(async () => {
       try {
-        const response = await axios.get(`/api/workflow/poll-architect/${request_id}/result`);
+        const response = await apiClient.get(`/api/workflow/poll-architect/${request_id}/result`);
         const finalData = response.data;
         const status = finalData.status;
 
@@ -957,7 +957,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
         content: msg.content
       }));
 
-      const response = await axios.post("/api/workflow/architect", {
+      const response = await apiClient.post("/api/workflow/architect", {
         prompt: content,
         workflow_id: savedWorkflowId,
         history: history,
@@ -1301,7 +1301,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
     const workflowPayload = buildWorkflowPayload();
 
     try {
-      const response = await axios.post("/api/workflow/create", workflowPayload);
+      const response = await apiClient.post("/api/workflow/create", workflowPayload);
       console.log("Workflow created:", response.data);
       setDropDown(0);
       setWorkflowIds(response.data.workflow_id, runId);
@@ -1323,7 +1323,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
     const workflowPayload = buildWorkflowPayload();
 
     try {
-      const response = await axios.post("/api/workflow/create", workflowPayload);
+      const response = await apiClient.post("/api/workflow/create", workflowPayload);
       console.log("Workflow created:", response.data);
       window.location.href = `/workflow/${response.data.workflow_id}`;
     } catch (error) {
@@ -1350,7 +1350,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
 
   const pollRunIdStatus = (runId) => {
     const interval = setInterval(() => {
-      axios.get(`/api/workflow/run/${runId}/status`)
+      apiClient.get(`/api/workflow/run/${runId}/status`)
         .then((response) => {
           const runData = response.data;
           const nodesStatus = runData?.nodes || {};
@@ -1473,7 +1473,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
       setLoadingNodes({});
       const savedWorkflowId = await handleSaveWorkFlow();
 
-      const response = await axios.post(`/api/workflow/${workflowId}/run`, {
+      const response = await apiClient.post(`/api/workflow/${workflowId}/run`, {
         cost: totalWorkflowCost
       });
       console.log("run data:", response.data);
@@ -1499,7 +1499,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
       setIsRunning(2);
       const savedWorkflowId = await handleSaveWorkFlow();
 
-      const response = await axios.post(`/api/workflow/workflow/${savedWorkflowId}/publish`, {
+      const response = await apiClient.post(`/api/workflow/workflow/${savedWorkflowId}/publish`, {
         publish: !publishWorkflow
       });
       setIsRunning(0);
@@ -1523,7 +1523,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
       setIsRunning(4);
       const savedWorkflowId = await handleSaveWorkFlow();
 
-      const response = await axios.post(`/api/workflow/workflow/${savedWorkflowId}/template`, {
+      const response = await apiClient.post(`/api/workflow/workflow/${savedWorkflowId}/template`, {
         is_template: !template.isPublishedTemplate
       });
       const is_template = response.data.is_template;
@@ -1548,7 +1548,7 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
     }
 
     try {
-      const response = await axios.post(`/api/workflow/update-category/${workflowId}`, {
+      const response = await apiClient.post(`/api/workflow/update-category/${workflowId}`, {
         category: categoryInput
       });
       console.log("Category updated:", response.data);

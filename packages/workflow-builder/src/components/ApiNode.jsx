@@ -5,7 +5,7 @@ import { Handle, Position, useReactFlow, useStore, useUpdateNodeInternals } from
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { apiNodeModels } from "./utility";
 import { getRunId, getWorkflowId } from "./WorkflowStore";
-import axios from "axios";
+import apiClient from "../apiClient";
 import { toast } from "react-hot-toast";
 import { IoClose, IoTrashOutline } from "react-icons/io5";
 import { RiInputMethodLine } from "react-icons/ri";
@@ -135,7 +135,7 @@ const ApiNode = ({ id, data, selected }) => {
       return;
     }
 
-    axios.get(`/api/workflow/${workflowId}/api-node-schemas`)
+    apiClient.get(`/api/workflow/${workflowId}/api-node-schemas`)
       .then((response) => {
         const schemas = response.data.api_node_schemas;
         if (schemas[id]) {
@@ -334,7 +334,7 @@ const ApiNode = ({ id, data, selected }) => {
 
   const pollNodeStatus = (run_id) => {
     const interval = setInterval(() => {
-      axios.get(`/api/workflow/run/${run_id}/status`)
+      apiClient.get(`/api/workflow/run/${run_id}/status`)
       .then((response) => {
         const nodesInRes = response.data.nodes || {};
         const nodeData = nodesInRes[id] || Object.entries(nodesInRes).find(([key]) => 
@@ -425,7 +425,7 @@ const ApiNode = ({ id, data, selected }) => {
       );
       params["params"] = filteredInputParams;
 
-      const response = await axios.post(`/api/workflow/${workflow_id}/node/${id}/run`,
+      const response = await apiClient.post(`/api/workflow/${workflow_id}/node/${id}/run`,
         {
           run_id: runId,
           model: selectedModel.id,
@@ -528,7 +528,7 @@ const ApiNode = ({ id, data, selected }) => {
 
     if (window.confirm("Are you sure you want to delete this history entry?")) {
       try {
-        await axios.delete(`/api/workflow/node-run/${currentHistory.node_run_id}`);
+        await apiClient.delete(`/api/workflow/node-run/${currentHistory.node_run_id}`);
         const newHistory = outputHistory.filter((_, i) => i !== currentHistoryIndex);
         
         data?.onDataChange?.(id, { 

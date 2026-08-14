@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "../apiClient";
 import { toast } from "react-hot-toast";
 
 export const imageModels = [
@@ -827,7 +827,7 @@ export const downloadFile = async (file_url, filename = "download") => {
     return;
   }
 
-  const response = await axios.post("/api/workflow/cloudfront-signed-url",
+  const response = await apiClient.post("/api/workflow/cloudfront-signed-url",
     {
       url: file_url
     }
