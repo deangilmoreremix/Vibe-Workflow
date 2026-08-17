@@ -1205,7 +1205,13 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
       }
 
       let params = {};
-      const input_params = formValues || {};
+      const input_params = { ...(formValues || {}) };
+      const isDynamicRef = (v) =>
+        (typeof v === "string" && v.includes("{{")) ||
+        (Array.isArray(v) && v.length > 0 && v.every((x) => typeof x === "string" && x.includes("{{")));
+      for (const [k, v] of Object.entries(localSources)) {
+        if (isDynamicRef(v)) input_params[k] = v;
+      }
       let output_params = {};
 
       if (node.type === "apiNode") {
