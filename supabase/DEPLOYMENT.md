@@ -10,7 +10,7 @@
 ### 1. Set Supabase Secrets
 
 ```bash
-supabase secrets set MU_API_KEY=d370ae6ecc87e99654ed2220fba0d1511224f41623867aedc2c2a0a06f15b208 --project-ref bzxohkrxcwodllketcpz
+supabase secrets set MU_API_KEY=<YOUR_MUAPI_KEY> --project-ref bzxohkrxcwodllketcpz
 ```
 
 ### 2. Deploy Supabase Edge Functions
@@ -38,7 +38,7 @@ create table workflows (
 ### 4. Netlify Deployment
 
 Set environment variable in Netlify dashboard:
-- `MU_API_KEY` - d370ae6ecc87e99654ed2220fba0d1511224f41623867aedc2c2a0a06f15b208
+- `MU_API_KEY` - <YOUR_MUAPI_KEY>
 
 For local development:
 ```bash
