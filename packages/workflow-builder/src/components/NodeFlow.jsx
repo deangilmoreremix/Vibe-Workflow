@@ -1473,13 +1473,13 @@ const NodeFlow = ({ initialNodeSchemas, initialWorkflowData }) => {
       setLoadingNodes({});
       const savedWorkflowId = await handleSaveWorkFlow();
 
-      const response = await axios.post(`/api/workflow/${workflowId}/run`, {
+      const response = await axios.post(`/api/workflow/${savedWorkflowId}/run`, {
         cost: totalWorkflowCost
       });
       console.log("run data:", response.data);
       const newRunId = response.data.run_id;
       setRunId(newRunId);
-      setWorkflowIds(workflowId, newRunId);
+      setWorkflowIds(savedWorkflowId, newRunId);
       pollRunIdStatus(newRunId);
     } catch (error) {
       console.log(error);
